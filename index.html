@@ -1,26 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Workbench&display=swap" rel="stylesheet">
-  <title>be on the lookout 👀</title>
-  <link rel="shortcut icon" href="https://styles.redditmedia.com/t5_8x5fe0/styles/profileIcon_ow8krahektdb1.png?width=256&height=256&frame=1&auto=webp&crop=256:256,smart&s=380bc5dc951d92f50f139e7b828e6f48a69eef34">
-  <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" href="logo.ico" type="image/x-icon">
+    <title>CrisMcCool</title>
+    <meta name="description" content="Web Developer Portfolio">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <meta name="theme-color" content="#1c1c1c">
+    <meta name="color-scheme" content="dark">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+        @import url('https://cdn-uicons.flaticon.com/2.3.0/uicons-regular-rounded/css/uicons-regular-rounded.css');
+        @import url('https://cdn-uicons.flaticon.com/2.3.0/uicons-brands/css/uicons-brands.css');
+        @import url('https://cdn-uicons.flaticon.com/2.3.0/uicons-solid-rounded/css/uicons-solid-rounded.css');
+        body {
+            font-family: 'Montserrat', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #1c1c1c;
+            color: #ffffff;
+            overflow: hidden; /* Prevents scrollbars */
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            border-radius: 15px;
+            background-color: #333;
+            box-shadow: 0 0px 25px rgba(0, 0, 0, 0.5);
+            width: 500px;
+            animation: fadeIn 1s ease-in-out; /* Fade in animation */
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        h1 {
+            font-size: 2.5em;
+            margin: 0;
+            margin-bottom: 20px;
+            animation: slideIn 1s ease-in-out; /* Slide in animation */
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        h1 i {
+            font-size: 0.7em;
+        }
+        .profiles {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .profiles a {
+            color: #b2d6ff;
+            text-decoration: none;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease-in-out; /* Smooth hover effect */
+        }
+        .profiles a:hover {
+            text-decoration: underline;
+            transform: translateY(-3px); /* Lift effect on hover */
+        }
+        .profiles a i {
+            margin-right: 10px;
+        }
+        footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #999;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                width: auto;
+            }
+            h1 {
+                font-size: 2em;
+                margin-bottom: 10px;
+            }
+            .profiles a {
+                font-size: 1em;
+            }
+        }
+    </style>
 </head>
 <body>
-
-<div id="particles-js"></div>
-
-<div id="content">
-  <h1>HI!</h1>
-  <p>i'm gonna add some stuff here soon :P<p>
-  <p>meanwhile, check out some <a href="https://github.com/CrisMcCool">cool stuff</a>!</p>
-</div>
-
-<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-<script src="script.js"></script>
-
+    <div class="container">
+        <h1>Under Construction <i class="fi fi-rr-tools"></i></h1>
+        <div class="profiles">
+            <a href="https://github.com/CrisMcCool" target="_blank"><i class="fi fi-brands-github"></i> GitHub</a>
+            <a href="https://scratch.mit.edu/users/CrisMcCool" target="_blank"><i class="fi fi-sr-cat"></i> Scratch</a>
+            <a href="https://replit.com/@replolz" target="_blank"><i class="fi fi-sr-computer"></i> Replit</a>
+        </div>
+        <footer>&copy; 2024 CrisMcCool</footer>
+    </div>
 </body>
 </html>
