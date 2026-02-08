@@ -19,19 +19,14 @@ const ORIGINAL_NAME = displayName.textContent;
 // =========================
 const projects = [
   {
-    name: "Project 1",
-    desc: "short one-line description",
-    url: "#"
+    name: "terminal",
+    desc: "very simple terminal in your browser",
+    url: "terminal"
   },
   {
-    name: "Project 1",
-    desc: "short one-line description",
-    url: "#"
-  },
-  {
-    name: "Project 1",
-    desc: "short one-line description",
-    url: "#"
+    name: "chihuahua-spin",
+    desc: "spinning chihuahua (copy of chihuahuaspin.com but with https)",
+    url: "chihuahua-spin"
   }
 ];
 
