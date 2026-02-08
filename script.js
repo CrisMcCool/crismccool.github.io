@@ -21,7 +21,7 @@ const projects = [
   {
     name: "code-editor",
     desc: "free-to-use code editor for any code in your browser",
-    url: "terminal"
+    url: "code-editor"
   },
   {
     name: "chihuahua-spin",
