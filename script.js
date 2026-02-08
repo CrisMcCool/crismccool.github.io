@@ -19,13 +19,13 @@ const ORIGINAL_NAME = displayName.textContent;
 // =========================
 const projects = [
   {
-    name: "terminal",
-    desc: "very simple terminal in your browser",
+    name: "code-editor",
+    desc: "free-to-use code editor for any code in your browser",
     url: "terminal"
   },
   {
     name: "chihuahua-spin",
-    desc: "spinning chihuahua (copy of chihuahuaspin.com but with https)",
+    desc: "a spinning chihuahua (https)",
     url: "chihuahua-spin"
   }
 ];
