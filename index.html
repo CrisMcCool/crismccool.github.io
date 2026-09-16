@@ -6,7 +6,6 @@
   <title>crisjonks</title>
   <meta name="description" content="Profile homepage" />
   <link rel="icon" type="image/x-icon" href="/icons/logo.ico">
-  <!-- Merriweather -->
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -21,49 +20,72 @@
         <div class="header-row">
           <div class="header-column">
             <h1 class="name" id="display-name">crisjonks</h1>
-            <div class="back-row"></div>
+            <div class="status-bar" id="status-bar" aria-live="polite" aria-label="Current activity">
+              <span class="status-text" id="status-text"></span><span class="status-cursor"></span>
+            </div>
           </div>
 
           <div class="header-actions">
-            <button id="links-btn" class="links-btn" aria-label="links">Links</button>
-            <button id="projects-btn" class="projects-btn" aria-label="projects">Projects</button>
+            <button id="links-btn" class="links-btn" aria-label="links" type="button">Links</button>
+            <button id="projects-btn" class="projects-btn" aria-label="projects" type="button">Projects</button>
+            <button id="contact-btn" class="contact-btn" aria-label="contact" type="button">Contact</button>
           </div>
         </div>
 
-        <ul class="tag-list" id="tag-list" aria-label="Short bio">
-          <li tabindex="0"><span class="tag-text">python</span></li>
-          <li tabindex="0"><span class="tag-text">html/css/js</span></li>
-          <li tabindex="0"><span class="tag-text">luau</span></li>
-        </ul>
+        <div class="content-stack">
+          <ul class="tag-list" id="tag-list" aria-label="Short bio">
+            <li tabindex="0"><span class="tag-text">python</span></li>
+            <li tabindex="0"><span class="tag-text">html/css/js</span></li>
+            <li tabindex="0"><span class="tag-text">luau</span></li>
+          </ul>
 
-        <section id="projects-container" class="projects hidden" aria-label="Projects list"></section>
+          <section id="projects-container" class="projects hidden" aria-label="Projects list"></section>
 
-        <div class="icons" id="icons" style="margin-top:14px;">
-          <button class="social-link" data-username="@crisjonks" data-url="https://github.com/crisjonks" data-img="/icons/github.png" aria-label="GitHub" title="GitHub">
-            <img class="social-img" src="/icons/github.png" alt="GitHub">
-          </button>
+          <section id="contact-container" class="contact hidden" aria-label="Contact section">
+            <div class="project">
+              <span class="project-name">contact</span>
+              <span class="project-desc">coming soon</span>
+            </div>
+          </section>
 
-          <button class="social-link" data-username="@crisjonks" data-url="https://replit.com/@crisjonks" data-img="/icons/replit.png" aria-label="Replit" title="Replit">
-            <img class="social-img" src="/icons/replit.png" alt="Replit">
-          </button>
+          <div class="icons" id="icons" style="margin-top:14px;">
+            <button class="social-link" data-username="@crisjonks" data-url="https://github.com/crisjonks" data-img="/icons/github.png" aria-label="GitHub" title="GitHub" type="button">
+              <img class="social-img" src="/icons/github.png" alt="GitHub">
+            </button>
 
-          <button class="social-link" data-username="@C7ulmr" data-url="https://www.roblox.com/users/1612618833/profile" data-img="/icons/roblox.png" aria-label="Roblox" title="Roblox">
-            <img class="social-img" src="/icons/roblox.png" alt="Roblox">
-          </button>
+            <button class="social-link" data-username="@crisjonx" data-url="https://codeberg.org/crisjonx" data-img="/icons/codeberg.png" aria-label="Codeberg" title="Codeberg" type="button">
+              <img class="social-img" src="/icons/codeberg.png" alt="Codeberg">
+            </button>
 
-          <button class="social-link" data-username="@C7ulmr" data-url="https://steamcommunity.com/profiles/76561199851082093/" data-img="/icons/steam.png" aria-label="Steam" title="Steam">
-            <img class="social-img" src="/icons/steam.png" alt="Steam">
-          </button>
+            <button class="social-link" data-username="@crisjonks" data-url="https://gitlab.com/crisjonks" data-img="/icons/gitlab.png" aria-label="GitLab" title="GitLab" type="button">
+              <img class="social-img" src="/icons/gitlab.png" alt="GitLab">
+            </button>
 
-          <button class="social-link" data-username="@C7ulmr" data-url="https://namemc.com/profile/C7ulmr.1" data-img="/icons/namemc.png" aria-label="NameMC" title="NameMC">
-            <img class="social-img" src="/icons/namemc.png" alt="NameMC">
-          </button>
+            <button class="social-link" data-username="@C7ulmr" data-url="https://www.roblox.com/users/1612618833/profile" data-img="/icons/roblox.png" aria-label="Roblox" title="Roblox" type="button">
+              <img class="social-img" src="/icons/roblox.png" alt="Roblox">
+            </button>
+
+            <button class="social-link" data-username="@C7ulmr" data-url="https://steamcommunity.com/profiles/76561199851082093/" data-img="/icons/steam.png" aria-label="Steam" title="Steam" type="button">
+              <img class="social-img" src="/icons/steam.png" alt="Steam">
+            </button>
+
+            <button class="social-link" data-username="@C7ulmr" data-url="https://namemc.com/profile/C7ulmr.1" data-img="/icons/namemc.png" aria-label="NameMC" title="NameMC" type="button">
+              <img class="social-img" src="/icons/namemc.png" alt="NameMC">
+            </button>
+
+            <button class="social-link" data-username="@crisjonks.bsky.social" data-url="https://bsky.app/profile/crisjonks.bsky.social" data-img="/icons/bluesky.svg" aria-label="Bluesky" title="Bluesky" type="button">
+              <img class="social-img" src="/icons/bluesky.svg" alt="Bluesky">
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </main>
 
-  <div class="time" id="my-time">my time is --:-- --, UTC-5</div>
+  <div class="time" id="my-time" data-tooltip="">my time is --:-- --, UTC-5</div>
+
+  <audio id="click-sound" src="/pop.mp3" preload="auto"></audio>
+
   <script src="script.js"></script>
 </body>
 </html>

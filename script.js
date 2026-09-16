@@ -1,116 +1,611 @@
-// =========================
-// ELEMENTS
-// =========================
+// -------------------------
+// Elements
+// -------------------------
 const linksBtn = document.getElementById("links-btn");
 const projectsBtn = document.getElementById("projects-btn");
+const contactBtn = document.getElementById("contact-btn");
 
 const tagList = document.getElementById("tag-list");
 const icons = document.getElementById("icons");
 const projectsContainer = document.getElementById("projects-container");
+const contactContainer = document.getElementById("contact-container");
 
 const displayName = document.getElementById("display-name");
 const timeEl = document.getElementById("my-time");
+const statusText = document.getElementById("status-text");
+const headerActions = document.querySelector(".header-actions");
 
-const ORIGINAL_NAME = displayName.textContent;
+const ORIGINAL_NAME = displayName ? displayName.textContent : "crisjonks";
 
 
-// =========================
-// PROJECTS (TEMPLATE)
-// =========================
+// -------------------------
+// Audio
+// -------------------------
+let clickSound = document.getElementById("click-sound");
+
+if (!clickSound) {
+  clickSound = document.createElement("audio");
+  clickSound.id = "click-sound";
+  clickSound.src = "/pop.mp3";
+  clickSound.preload = "auto";
+  document.body.appendChild(clickSound);
+}
+
+function playClickSound() {
+  if (!clickSound) return;
+  try {
+    clickSound.currentTime = 0;
+  } catch (_) {}
+  clickSound.play().catch(() => {});
+}
+
+document.addEventListener(
+  "pointerdown",
+  (e) => {
+    if (e.target.closest("button, a")) {
+      playClickSound();
+    }
+  },
+  true
+);
+
+
+// -------------------------
+// Projects
+// -------------------------
 const projects = [
   {
     name: "code-editor",
     desc: "free-to-use code editor for any code in your browser",
-    url: "code-editor"
+    url: "https://crisjonks.github.io/code-editor",
   },
   {
     name: "chihuahua-spin",
     desc: "a spinning chihuahua (https)",
-    url: "chihuahua-spin"
-  }
+    url: "https://crisjonks.github.io/chihuahua-spin",
+  },
 ];
 
-projectsContainer.innerHTML = projects.map(p => `
-  <div class="project">
-    <a href="${p.url}" class="project-name">${p.name}</a>
-    <span class="project-desc">${p.desc}</span>
-  </div>
-`).join("");
+if (projectsContainer) {
+  projectsContainer.innerHTML = projects
+    .map(
+      (p) => `
+      <div class="project">
+        <a href="${p.url}" class="project-name" target="_blank" rel="noopener noreferrer">${p.name}</a>
+        <span class="project-desc">${p.desc}</span>
+      </div>
+    `
+    )
+    .join("");
+}
 
 
-// =========================
-// VIEW SWITCHING
-// =========================
+// -------------------------
+// Contact section
+// -------------------------
+let ensuredContactBtn = contactBtn;
+if (!ensuredContactBtn && headerActions) {
+  ensuredContactBtn = document.createElement("button");
+  ensuredContactBtn.id = "contact-btn";
+  ensuredContactBtn.className = "contact-btn";
+  ensuredContactBtn.type = "button";
+  ensuredContactBtn.setAttribute("aria-label", "contact");
+  ensuredContactBtn.textContent = "Contact";
+  headerActions.appendChild(ensuredContactBtn);
+}
+
+let ensuredContactContainer = contactContainer;
+if (!ensuredContactContainer && projectsContainer) {
+  ensuredContactContainer = document.createElement("section");
+  ensuredContactContainer.id = "contact-container";
+  ensuredContactContainer.className = "contact hidden";
+  ensuredContactContainer.setAttribute("aria-label", "Contact section");
+  ensuredContactContainer.innerHTML = `
+    <div class="project">
+      <span class="project-name">contact</span>
+      <span class="project-desc">coming soon</span>
+    </div>
+  `;
+  projectsContainer.insertAdjacentElement("afterend", ensuredContactContainer);
+}
+
+
+// -------------------------
+// Tab switching
+// -------------------------
+function setHidden(el, hidden) {
+  if (!el) return;
+  el.classList.toggle("hidden", hidden);
+}
+
+function setActive(btn) {
+  [linksBtn, projectsBtn, ensuredContactBtn].forEach((b) => b && b.classList.remove("active"));
+  if (btn) btn.classList.add("active");
+}
+
 function showLinks() {
-  tagList.style.display = "flex";
-  icons.style.display = "flex";
-  projectsContainer.classList.add("hidden");
-
-  displayName.textContent = ORIGINAL_NAME;
-
-  linksBtn.classList.add("active");
-  projectsBtn.classList.remove("active");
+  if (tagList) tagList.style.display = "flex";
+  if (icons) icons.style.display = "flex";
+  setHidden(projectsContainer, true);
+  setHidden(ensuredContactContainer, true);
+  if (displayName) displayName.textContent = ORIGINAL_NAME;
+  setActive(linksBtn);
 }
 
 function showProjects() {
-  tagList.style.display = "none";
-  icons.style.display = "none";
-  projectsContainer.classList.remove("hidden");
-
-  displayName.textContent = "projects";
-
-  projectsBtn.classList.add("active");
-  linksBtn.classList.remove("active");
+  if (tagList) tagList.style.display = "none";
+  if (icons) icons.style.display = "none";
+  setHidden(projectsContainer, false);
+  setHidden(ensuredContactContainer, true);
+  if (displayName) displayName.textContent = "projects";
+  setActive(projectsBtn);
 }
 
-linksBtn.addEventListener("click", showLinks);
-projectsBtn.addEventListener("click", showProjects);
+function showContact() {
+  if (tagList) tagList.style.display = "none";
+  if (icons) icons.style.display = "none";
+  setHidden(projectsContainer, true);
+  setHidden(ensuredContactContainer, false);
+  if (displayName) displayName.textContent = "contact";
+  setActive(ensuredContactBtn);
+}
 
-// default
+if (linksBtn) linksBtn.addEventListener("click", showLinks);
+if (projectsBtn) projectsBtn.addEventListener("click", showProjects);
+if (ensuredContactBtn) ensuredContactBtn.addEventListener("click", showContact);
+
 showLinks();
 
 
-// =========================
-// SOCIAL ICON BEHAVIOR
-// =========================
-icons.addEventListener("pointerover", e => {
-  const btn = e.target.closest(".social-link");
-  if (!btn) return;
+// -------------------------
+// Hover username on socials
+// -------------------------
+if (icons && displayName) {
+  icons.addEventListener("pointerover", (e) => {
+    const btn = e.target.closest(".social-link");
+    if (!btn) return;
+    displayName.textContent = btn.dataset.username || ORIGINAL_NAME;
+    displayName.classList.add("pop");
+  });
 
-  displayName.textContent = btn.dataset.username || ORIGINAL_NAME;
-  displayName.classList.add("pop");
+  icons.addEventListener("pointerout", () => {
+    displayName.textContent = ORIGINAL_NAME;
+    displayName.classList.remove("pop");
+  });
+
+  icons.addEventListener("click", (e) => {
+    const btn = e.target.closest(".social-link");
+    if (!btn) return;
+    const url = btn.dataset.url;
+    if (url) window.open(url, "_blank", "noopener,noreferrer");
+  });
+}
+
+
+// -------------------------
+// Toronto time + tooltip
+// -------------------------
+const torontoFmt = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "America/Toronto",
+  hour: "numeric",
+  minute: "2-digit",
+  hour12: true,
 });
 
-icons.addEventListener("pointerout", () => {
-  displayName.textContent = ORIGINAL_NAME;
-  displayName.classList.remove("pop");
+const torontoOffsetFmt = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "America/Toronto",
+  timeZoneName: "shortOffset",
 });
 
-// redirect SAME TAB
-icons.addEventListener("click", e => {
-  const btn = e.target.closest(".social-link");
-  if (!btn) return;
-
-  const url = btn.dataset.url;
-  if (url) window.location.href = url;
+const toronto24Fmt = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "America/Toronto",
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h23",
 });
 
+function getTorontoOffset() {
+  const parts = torontoOffsetFmt.formatToParts(new Date());
+  const tz = parts.find((p) => p.type === "timeZoneName");
+  return tz ? tz.value.replace("GMT", "UTC") : "UTC-5";
+}
 
-// =========================
-// CLOCK (UTC-5)
-// =========================
+function isProbablyAwake() {
+  const parts = toronto24Fmt.formatToParts(new Date());
+  const hour = Number(parts.find((p) => p.type === "hour")?.value || "0");
+  const minute = Number(parts.find((p) => p.type === "minute")?.value || "0");
+
+  return (
+    (hour > 6 || (hour === 6 && minute >= 0)) &&
+    (hour < 22 || (hour === 22 && minute < 30))
+  );
+}
+
 function updateTime() {
-  const now = new Date();
-  const utc = now.getTime() + now.getTimezoneOffset() * 60000;
-  const target = new Date(utc - 5 * 3600000);
+  if (!timeEl) return;
 
-  let h = target.getHours();
-  const m = target.getMinutes().toString().padStart(2, "0");
-  const ampm = h >= 12 ? "PM" : "AM";
-  h = h % 12 || 12;
+  const parts = torontoFmt.formatToParts(new Date());
+  const h = parts.find((p) => p.type === "hour")?.value || "--";
+  const m = parts.find((p) => p.type === "minute")?.value || "--";
+  const ampm = (parts.find((p) => p.type === "dayPeriod")?.value || "AM").toUpperCase();
 
-  timeEl.textContent = `my time is ${h}:${m} ${ampm}, UTC-5`;
+  const base = `my time is ${h}:${m} ${ampm}, ${getTorontoOffset()}`;
+  timeEl.textContent = base;
+
+  const tip = isProbablyAwake() ? "i'm probably awake" : "i'm probably asleep";
+  timeEl.title = tip;
+  timeEl.dataset.tooltip = tip;
 }
 
 updateTime();
 setInterval(updateTime, 60000);
+
+
+// -------------------------
+// Typing status text
+// -------------------------
+if (statusText) {
+  const STATUS_TEXT = "coding things nobody asked for since forever";
+  const TYPE_SPEED = 55;
+  let charIndex = 0;
+
+  function typeStatus() {
+    charIndex++;
+    statusText.textContent = STATUS_TEXT.slice(0, charIndex);
+    if (charIndex < STATUS_TEXT.length) {
+      setTimeout(typeStatus, TYPE_SPEED);
+    }
+  }
+
+  setTimeout(typeStatus, 900);
+}
+
+
+// -------------------------------------------------------
+// Easter Egg — click the avatar 7 times to open Snake
+// -------------------------------------------------------
+(function () {
+  const avatarEl = document.querySelector(".avatar");
+  if (!avatarEl) return;
+
+  avatarEl.style.cursor = "pointer";
+
+  let count = 0;
+  let resetTimer = null;
+
+  avatarEl.addEventListener("click", () => {
+    count++;
+
+    // Restart bump animation each click
+    avatarEl.classList.remove("avatar-bump");
+    void avatarEl.offsetWidth; // force reflow
+    avatarEl.classList.add("avatar-bump");
+
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(() => { count = 0; }, 1400);
+
+    if (count >= 7) {
+      count = 0;
+      clearTimeout(resetTimer);
+      openSnakeGame();
+    }
+  });
+
+  avatarEl.addEventListener("animationend", () => {
+    avatarEl.classList.remove("avatar-bump");
+  });
+})();
+
+// Also: Konami code (↑↑↓↓←→←→BA)
+(function () {
+  const SEQ = [
+    "ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown",
+    "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight",
+    "b", "a"
+  ];
+  let idx = 0;
+
+  document.addEventListener("keydown", (e) => {
+    if (document.getElementById("egg-overlay")) return; // game already open
+    if (e.key === SEQ[idx]) {
+      idx++;
+      if (idx === SEQ.length) {
+        openSnakeGame();
+        idx = 0;
+      }
+    } else {
+      idx = e.key === SEQ[0] ? 1 : 0;
+    }
+  });
+})();
+
+
+// -------------------------------------------------------
+// Snake Game
+// -------------------------------------------------------
+function openSnakeGame() {
+  if (document.getElementById("egg-overlay")) return;
+
+  /* --- Build DOM --- */
+  const overlay = document.createElement("div");
+  overlay.className = "egg-overlay";
+  overlay.id = "egg-overlay";
+
+  const panel = document.createElement("div");
+  panel.className = "egg-panel";
+
+  const closeBtn = document.createElement("button");
+  closeBtn.className = "egg-close";
+  closeBtn.textContent = "✕";
+  closeBtn.setAttribute("aria-label", "close");
+
+  const title = document.createElement("div");
+  title.className = "egg-title";
+  title.textContent = "🦜 snake";
+
+  const scoreEl = document.createElement("div");
+  scoreEl.className = "egg-score";
+  scoreEl.textContent = "score: 0";
+
+  const canvas = document.createElement("canvas");
+  canvas.width  = 280;
+  canvas.height = 280;
+  canvas.className = "egg-canvas";
+
+  const hint = document.createElement("div");
+  hint.className = "egg-hint";
+  hint.textContent = "arrows / wasd  ·  space to restart  ·  esc to close";
+
+  panel.append(closeBtn, title, scoreEl, canvas, hint);
+  overlay.appendChild(panel);
+  document.body.appendChild(overlay);
+
+  /* --- Game state --- */
+  const CELL = 20;
+  const COLS = canvas.width  / CELL;   // 14
+  const ROWS = canvas.height / CELL;   // 14
+  const ctx  = canvas.getContext("2d");
+
+  const HS_KEY = "snake-hs";
+  const getHS  = () => parseInt(localStorage.getItem(HS_KEY) || "0", 10);
+  const saveHS = (s) => { if (s > getHS()) localStorage.setItem(HS_KEY, String(s)); };
+
+  let snake, dir, nextDir, food, score, gameOver, gameInterval;
+
+  function init() {
+    snake    = [{ x: 7, y: 7 }, { x: 6, y: 7 }, { x: 5, y: 7 }];
+    dir      = { x: 1, y: 0 };
+    nextDir  = { x: 1, y: 0 };
+    food     = spawnFood();
+    score    = 0;
+    gameOver = false;
+    scoreEl.textContent = `score: 0  ·  best: ${getHS()}`;
+    clearInterval(gameInterval);
+    gameInterval = setInterval(tick, 115);
+    draw();
+  }
+
+  function spawnFood() {
+    let pos;
+    do {
+      pos = {
+        x: Math.floor(Math.random() * COLS),
+        y: Math.floor(Math.random() * ROWS),
+      };
+    } while (snake.some((s) => s.x === pos.x && s.y === pos.y));
+    return pos;
+  }
+
+  function tick() {
+    if (gameOver) return;
+    dir = nextDir;
+    const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+
+    if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) {
+      return endGame();
+    }
+    if (snake.some((s) => s.x === head.x && s.y === head.y)) {
+      return endGame();
+    }
+
+    snake.unshift(head);
+    if (head.x === food.x && head.y === food.y) {
+      score++;
+      scoreEl.textContent = `score: ${score}  ·  best: ${getHS()}`;
+      food = spawnFood();
+    } else {
+      snake.pop();
+    }
+    draw();
+  }
+
+  function endGame() {
+    gameOver = true;
+    saveHS(score);
+    clearInterval(gameInterval);
+    draw();
+
+    // Dim overlay
+    ctx.fillStyle = "rgba(0,0,0,0.52)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    ctx.font = "bold 19px 'Merriweather', Georgia, serif";
+    ctx.fillStyle = "#4ede7a";
+    ctx.fillText("game over", canvas.width / 2, canvas.height / 2 - 22);
+
+    ctx.font = "13px 'Merriweather', Georgia, serif";
+    ctx.fillStyle = "#9bcfa8";
+    ctx.fillText(`score: ${score}  ·  best: ${getHS()}`, canvas.width / 2, canvas.height / 2 + 4);
+
+    ctx.font = "11px 'Merriweather', Georgia, serif";
+    ctx.fillStyle = "#4d7a59";
+    ctx.fillText("space or enter to restart", canvas.width / 2, canvas.height / 2 + 26);
+  }
+
+  function rrect(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y,     x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x,     y + h, r);
+    ctx.arcTo(x,     y + h, x,     y,     r);
+    ctx.arcTo(x,     y,     x + w, y,     r);
+    ctx.closePath();
+  }
+
+  function draw() {
+    // Background
+    ctx.fillStyle = "#08140a";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Subtle grid
+    ctx.strokeStyle = "rgba(78,222,122,0.06)";
+    ctx.lineWidth = 0.5;
+    for (let x = 0; x <= COLS; x++) {
+      ctx.beginPath();
+      ctx.moveTo(x * CELL, 0);
+      ctx.lineTo(x * CELL, canvas.height);
+      ctx.stroke();
+    }
+    for (let y = 0; y <= ROWS; y++) {
+      ctx.beginPath();
+      ctx.moveTo(0, y * CELL);
+      ctx.lineTo(canvas.width, y * CELL);
+      ctx.stroke();
+    }
+
+    // Food — golden seed with a tiny specular dot
+    const fx = food.x * CELL + CELL / 2;
+    const fy = food.y * CELL + CELL / 2;
+    ctx.fillStyle = "#f0c040";
+    ctx.beginPath();
+    ctx.arc(fx, fy, CELL / 2 - 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,0.45)";
+    ctx.beginPath();
+    ctx.arc(fx - 2, fy - 2, 2, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Snake body
+    for (let i = snake.length - 1; i >= 0; i--) {
+      const seg = snake[i];
+      const t   = i / Math.max(snake.length - 1, 1);
+
+      if (i === 0) {
+        ctx.fillStyle = "#4ede7a";
+      } else {
+        const g = Math.round(222 - t * 148);
+        const b = Math.round(60  + t * 15);
+        ctx.fillStyle = `rgb(15, ${g}, ${b})`;
+      }
+
+      const pad = i === 0 ? 1 : 2;
+      const r   = i === 0 ? 6 : 4;
+      rrect(
+        seg.x * CELL + pad,
+        seg.y * CELL + pad,
+        CELL - pad * 2,
+        CELL - pad * 2,
+        r
+      );
+      ctx.fill();
+    }
+
+    // Eyes on head
+    if (snake.length > 0) {
+      const hd = snake[0];
+      const cx = hd.x * CELL + CELL / 2;
+      const cy = hd.y * CELL + CELL / 2;
+
+      let ex1, ey1, ex2, ey2;
+      if      (dir.x ===  1) { ex1 = cx + 4; ey1 = cy - 3; ex2 = cx + 4; ey2 = cy + 3; }
+      else if (dir.x === -1) { ex1 = cx - 4; ey1 = cy - 3; ex2 = cx - 4; ey2 = cy + 3; }
+      else if (dir.y === -1) { ex1 = cx - 3; ey1 = cy - 4; ex2 = cx + 3; ey2 = cy - 4; }
+      else                   { ex1 = cx - 3; ey1 = cy + 4; ex2 = cx + 3; ey2 = cy + 4; }
+
+      ctx.fillStyle = "#08140a";
+      ctx.beginPath(); ctx.arc(ex1, ey1, 2.2, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(ex2, ey2, 2.2, 0, Math.PI * 2); ctx.fill();
+
+      // Specular
+      ctx.fillStyle = "rgba(255,255,255,0.55)";
+      ctx.beginPath(); ctx.arc(ex1 - 0.5, ey1 - 0.5, 0.9, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(ex2 - 0.5, ey2 - 0.5, 0.9, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+
+  /* --- Keyboard controls --- */
+  const MOVE_KEYS = new Set([
+    "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " ",
+    "w", "a", "s", "d", "W", "A", "S", "D",
+  ]);
+
+  const keyHandler = (e) => {
+    if (MOVE_KEYS.has(e.key)) e.preventDefault();
+
+    if (e.key === "Escape") { closeSnakeGame(); return; }
+    if ((e.key === " " || e.key === "Enter") && gameOver) { init(); return; }
+
+    if (dir.x !== undefined) {
+      if ((e.key === "ArrowUp"    || e.key === "w" || e.key === "W") && dir.y !== 1)  nextDir = { x: 0,  y: -1 };
+      if ((e.key === "ArrowDown"  || e.key === "s" || e.key === "S") && dir.y !== -1) nextDir = { x: 0,  y:  1 };
+      if ((e.key === "ArrowLeft"  || e.key === "a" || e.key === "A") && dir.x !== 1)  nextDir = { x: -1, y:  0 };
+      if ((e.key === "ArrowRight" || e.key === "d" || e.key === "D") && dir.x !== -1) nextDir = { x: 1,  y:  0 };
+    }
+  };
+
+  document.addEventListener("keydown", keyHandler);
+
+  /* --- Touch / swipe --- */
+  let touchOrigin = null;
+  canvas.addEventListener("touchstart", (e) => {
+    touchOrigin = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    e.preventDefault();
+  }, { passive: false });
+
+  canvas.addEventListener("touchend", (e) => {
+    if (!touchOrigin) return;
+    const dx = e.changedTouches[0].clientX - touchOrigin.x;
+    const dy = e.changedTouches[0].clientY - touchOrigin.y;
+    touchOrigin = null;
+
+    if (gameOver) { init(); return; }
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+      if (dx >  16 && dir.x !== -1) nextDir = { x: 1,  y: 0 };
+      if (dx < -16 && dir.x !==  1) nextDir = { x: -1, y: 0 };
+    } else {
+      if (dy >  16 && dir.y !== -1) nextDir = { x: 0, y:  1 };
+      if (dy < -16 && dir.y !==  1) nextDir = { x: 0, y: -1 };
+    }
+    e.preventDefault();
+  }, { passive: false });
+
+  /* --- Close on backdrop click --- */
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) closeSnakeGame();
+  });
+  closeBtn.addEventListener("click", closeSnakeGame);
+
+  /* --- Cleanup hook --- */
+  overlay._cleanup = () => {
+    clearInterval(gameInterval);
+    document.removeEventListener("keydown", keyHandler);
+  };
+
+  init();
+}
+
+function closeSnakeGame() {
+  const overlay = document.getElementById("egg-overlay");
+  if (!overlay) return;
+  if (overlay._cleanup) overlay._cleanup();
+  // Fade out panel then remove
+  const panel = overlay.querySelector(".egg-panel");
+  if (panel) panel.style.animation = "egg-out 0.18s ease forwards";
+  overlay.style.transition = "opacity 0.2s ease";
+  overlay.style.opacity = "0";
+  setTimeout(() => overlay.remove(), 220);
+}
